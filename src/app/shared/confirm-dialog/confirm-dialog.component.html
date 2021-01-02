@@ -11,9 +11,11 @@
 </ng-template>
 
 <div mat-dialog-actions>
-  <button mat-raised-button (click)="cancel()">
-    {{ data.cancelText }}
-  </button>
+  <ng-template [ngIf]="data.cancelText">
+    <button mat-raised-button (click)="cancel()">
+      {{ data.cancelText }}
+    </button>
+  </ng-template>
   <button mat-raised-button color="primary" (click)="confirm()">
     {{ data.confirmText }}
   </button>

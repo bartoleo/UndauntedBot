@@ -5,6 +5,8 @@ body {
 
 @import "theme.scss";
 
+@import "toast.scss";
+
 @font-face {
   font-family: "BodoniXT";
   src: local("BodoniXT"),
@@ -110,4 +112,49 @@ my-app {
 
 .toolbar-spacer {
   flex: 1 1 auto;
+}
+
+.game-content {
+  margin: 5px;
+}
+
+.game-block {
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.game-content-xs, .game-content-sm{
+  .logs{
+    height: 400px;
+    overflow-y: auto;
+  }
+  .map{
+    height: 400px;
+    overflow: auto;
+  }
+}
+.game-content-gt-sm{
+  .logs{
+    height: 100%;
+    overflow-y: auto;
+  }
+  .map{
+    height: 100%;
+    overflow: auto;
+  }
+}
+.game-content .header {
+  height: 100px;
+}
+.game-content .cards {
+  height: 100px;
+}
+.game-content .map {
+  position: relative;
+}
+.map .cell {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 1px solid black;
 }

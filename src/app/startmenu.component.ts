@@ -25,7 +25,7 @@ import { Router } from "@angular/router";
         <mat-label>Scenario</mat-label>
         <mat-select required [(value)]="scenario">
           <mat-option
-            *ngFor="let scenario of scenarioList"
+            *ngFor="let scenario of gameService.scenarios"
             [value]="scenario.id"
           >
             {{ scenario.name }}
@@ -116,15 +116,15 @@ import { Router } from "@angular/router";
 })
 export class StartMenuComponent {
   @Input() name: string;
-  scenarioList: Array<Scenario>;
   bot: string = "german";
-  scenario: number;
+  scenario: number = 1;
 
   constructor(private gameService: GameService, private router: Router) {}
 
   ngOnInit() {
-    this.scenarioList = this.gameService.scenarios;
+    this.gameService.init();
   }
+
   onStartPlay() {
     this.gameService.startScenario(this.scenario, this.bot);
     this.router.navigateByUrl("game");

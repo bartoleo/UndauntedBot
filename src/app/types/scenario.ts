@@ -1,6 +1,6 @@
-/*enum ScenarioType {
+export enum ScenarioType {
   CONQUER
-}*/
+}
 
 export class Scenario {
   id: number;

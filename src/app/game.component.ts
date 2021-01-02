@@ -19,11 +19,27 @@ import { Router } from "@angular/router";
         <mat-icon>close</mat-icon>
       </button>
     </mat-toolbar>
-
-    {{ gameService.scenario }}
-    {{ gameService.bot }}
-
-    log map cards
+<div class="game-content">
+          <div gdAreas.xs="header |  map | logs | cards" gdGap="5px"
+               gdColumns.xs="none"
+               [ngStyle.xs]="{'max-width': '100%'}"
+               ngClass.xs="game-content-xs"
+               gdAreas.sm="header |  map | logs | cards" gdGap="5px"
+               gdColumns.sm="none"
+               [ngStyle.sm]="{'max-width': '100%'}"
+               ngClass.sm="game-content-sm"
+               gdAreas.gt-sm="header header | logs map | cards cards"
+               gdColumns.gt-sm="auto-fill" [ngStyle]="{'max-width': 'auto'}"
+               gdRows.gt-sm="100px 100% 100px"
+               [ngStyle.gt-sm]="{'max-width': '100%'}"
+               ngClass.gt-sm="game-content-gt-sm"
+               >
+            <div class="game-block header" gdArea="header">Scenario: {{gameService.scenario.name}} | Bot: {{ gameService.bot }}</div>
+            <game-logs class="game-block logs" gdArea="logs">Log</game-logs>
+            <game-map class="game-block map" gdArea="map">Map</game-map>
+            <game-cards class="game-block cards" gdArea="cards">Cards</game-cards>
+          </div>
+</div>
   `,
   styles: [``]
 })
