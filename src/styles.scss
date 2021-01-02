@@ -82,6 +82,16 @@ body {
 .icon-binoculars:before {
   content: "\66";
 }
+.icon-bot:before {
+  content: "\65";
+}
+.icon-human:before {
+  content: "\67";
+}
+
+.large {
+  font-size: 32px;
+}
 
 
 my-app {

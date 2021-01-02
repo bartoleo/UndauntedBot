@@ -42,10 +42,10 @@ import { Router } from "@angular/router";
           [(value)]="bot"
         >
           <mat-button-toggle value="german"
-            ><mat-icon>memory</mat-icon> Bot</mat-button-toggle
+            ><i class="icon-bot large"></i> Bot</mat-button-toggle
           >
           <mat-button-toggle value="us"
-            ><mat-icon>face</mat-icon> Player</mat-button-toggle
+            ><i class="icon-human large"></i> Player</mat-button-toggle
           >
         </mat-button-toggle-group>
       </p>
@@ -58,10 +58,10 @@ import { Router } from "@angular/router";
           [(value)]="bot"
         >
           <mat-button-toggle value="us"
-            ><mat-icon>memory</mat-icon> Bot</mat-button-toggle
+            ><i class="icon-bot large"></i> Bot</mat-button-toggle
           >
           <mat-button-toggle value="german"
-            ><mat-icon>face</mat-icon> Player</mat-button-toggle
+            ><i class="icon-human large"></i> Player</mat-button-toggle
           >
         </mat-button-toggle-group>
       </p>

@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { Scenario } from "./types/scenario";
 import { GameService } from "./services/game.service";
-import { ConfirmDialogService } from "app/shared/confirm-dialog/confirm-dialog.service";
+import { ConfirmDialogService } from "./shared/confirm-dialog/confirm-dialog.service";
 import { Router } from "@angular/router";
 
 @Component({

@@ -49,10 +49,10 @@ export function initApp(gameService: GameService) {
     HttpClientModule,
     ConfirmDialogModule,
     RouterModule.forRoot([
-      { path: "startMenu", component: StartMenuComponent },
-      { path: "game", component: GameComponent },
-      { path: "", redirectTo: "/startMenu", pathMatch: "full" }
-    ])
+    { path: "startMenu", component: StartMenuComponent },
+    { path: "game", component: GameComponent },
+    { path: "", redirectTo: "/startMenu", pathMatch: "full" }
+], { relativeLinkResolution: 'legacy' })
   ],
   declarations: [AppComponent, StartMenuComponent, GameComponent],
   bootstrap: [AppComponent],
