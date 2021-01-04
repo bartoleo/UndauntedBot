@@ -137,10 +137,12 @@ my-app {
   .logs{
     height: 100%;
     overflow-y: auto;
+    resize: horizontal;
   }
   .map{
     height: 100%;
     overflow: auto;
+    resize: horizontal;
   }
 }
 .game-content .header {
@@ -149,8 +151,11 @@ my-app {
 .game-content .cards {
   height: 100px;
 }
-.game-content .map {
+.map-container {
   position: relative;
+}
+.map-outside {
+  height: 100px;
 }
 .map .cell {
   position: absolute;
@@ -158,3 +163,7 @@ my-app {
   height: 80px;
   border: 1px solid black;
 }
+.map .cdk-drag{
+  cursor: move;
+}
+

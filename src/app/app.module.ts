@@ -23,6 +23,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { FlexLayoutModule } from "@angular/flex-layout";
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { HttpClientModule } from "@angular/common/http";
 
@@ -55,6 +56,7 @@ import { ToastrModule } from 'ngx-toastr';
     MatButtonToggleModule,
     MatIconModule,
     DragDropModule,
+    OverlayModule,
     FlexLayoutModule,
     HttpClientModule,
     ConfirmDialogModule,

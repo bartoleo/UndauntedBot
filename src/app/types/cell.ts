@@ -1,6 +1,5 @@
-import { debug } from "console";
-import { timingSafeEqual } from "crypto";
 import { CellPlayerFlags } from "./cell-player-flags";
+import { GameMap } from "./game-map";
 
 
 export class Cell {
@@ -25,8 +24,18 @@ export class Cell {
     return new Cell('',x,y,0,0);
   }
 
-  renderStyle(): String{
-    var style=  "left:"+(this.x*80)+"px; top:"+(this.y*80)+"px;";
+  getDrawCoords(map: GameMap){
+    let x = this.x*map.tileSize;
+    if (this.y%2==1){
+      x+=map.tileSize/2;
+    }
+    let y = this.y*map.tileSize+map.outsideHeight;
+    return {x,y};
+  } 
+  
+  renderStyle(map: GameMap): String{
+    let {x,y} = this.getDrawCoords(map);
+    var style="left:"+x+"px; top:"+y+"px;";
     return style;
   }
 

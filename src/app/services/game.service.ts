@@ -3,7 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { Scenario } from "../types/scenario";
 import { Card } from "../types/card";
 import { Cards } from "../types/cards";
-import { GameMap } from "../types/gamemap";
+import { GameMap } from "../types/game-map";
+import { Tile } from "../types/tile";
 import { Cell } from "../types/cell";
 import { LogType, Log } from "../types/log";
 import { ToastrService } from 'ngx-toastr';
@@ -24,6 +25,7 @@ export class GameService {
   botHand: Array<Card>;
   botPlayed: Array<Card>;
   botDiscard: Array<Card>;
+  tiles: Record<string,Tile>;
 
   constructor(public http: HttpClient, private toastr: ToastrService
     ) {
@@ -36,10 +38,10 @@ export class GameService {
 
   async loadScenarios() {
     let data = (await this.http
-      .get("./assets/scenarios.json")
+      .get("./assets/game-data.json")
       .toPromise()) as Array<Object>;
 
-    data.forEach((element) => {
+    data["scenarios"].forEach((element) => {
       this.scenarios.push(new Scenario(element));
     });
 
@@ -64,7 +66,7 @@ export class GameService {
     this.logs.push(new Log(0,"log1", LogType.LOG));
     this.logs.push(new Log(0,"game end", LogType.GAME_END));
 
-    this.map = new GameMap(10,10);
+    this.map = new GameMap(10,10, 82, false);
     this.map.setCell(0,0, new Cell('A2',0,0,1,1));
     this.map.setCell(1,0, new Cell('A2',1,0,2,2));
     this.map.setCell(2,0, new Cell('A3',2,0,1,1));
