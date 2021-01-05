@@ -69,10 +69,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-us-star:before {
+.icon-us:before {
   content: "\62";
 }
-.icon-german-cross:before {
+.icon-german:before {
   content: "\61";
 }
 .icon-target:before {
@@ -163,7 +163,31 @@ my-app {
   height: 80px;
   border: 1px solid black;
 }
+.map .unit-wrapper{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 1px solid black;
+  border-radius: 20px;
+  z-index: 999;
+  font-size: 4px;
+}
+.map .unit{
+  width: 40px;
+  height: 40px;
+
+}
 .map .cdk-drag{
   cursor: move;
 }
 
+.drop-target{
+  border: 2px solid red !important;
+}
+
+.hidden{
+  display: none;
+}
+.map .cdk-drag-placeholder {
+  display:none !important;
+}

@@ -24,19 +24,4 @@ export class Cell {
     return new Cell('',x,y,0,0);
   }
 
-  getDrawCoords(map: GameMap){
-    let x = this.x*map.tileSize;
-    if (this.y%2==1){
-      x+=map.tileSize/2;
-    }
-    let y = this.y*map.tileSize+map.outsideHeight;
-    return {x,y};
-  } 
-  
-  renderStyle(map: GameMap): String{
-    let {x,y} = this.getDrawCoords(map);
-    var style="left:"+x+"px; top:"+y+"px;";
-    return style;
-  }
-
 }

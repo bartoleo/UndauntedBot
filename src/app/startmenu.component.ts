@@ -41,10 +41,10 @@ import { Router } from "@angular/router";
           appearance="standard"
           [(value)]="bot"
         >
-          <mat-button-toggle value="german"
+          <mat-button-toggle value="us"
             ><i class="icon-bot large"></i> Bot</mat-button-toggle
           >
-          <mat-button-toggle value="us"
+          <mat-button-toggle value="german"
             ><i class="icon-human large"></i> Player</mat-button-toggle
           >
         </mat-button-toggle-group>
@@ -57,10 +57,10 @@ import { Router } from "@angular/router";
           appearance="standard"
           [(value)]="bot"
         >
-          <mat-button-toggle value="us"
+          <mat-button-toggle value="german"
             ><i class="icon-bot large"></i> Bot</mat-button-toggle
           >
-          <mat-button-toggle value="german"
+          <mat-button-toggle value="us"
             ><i class="icon-human large"></i> Player</mat-button-toggle
           >
         </mat-button-toggle-group>

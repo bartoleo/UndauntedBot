@@ -1,35 +1,89 @@
-import { Component, ViewChild, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Component, ViewChild, TemplateRef, ViewContainerRef, ElementRef, Renderer2 } from '@angular/core';
 import { GameService } from "./services/game.service";
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { fromEvent, Subscription } from 'rxjs';
 import { take, filter } from 'rxjs/operators';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
+import { Unit, UnitType } from "./types/unit";
 
 @Component({
   selector: "game-map",
   template: `
-    <div class="map-container" [style]="gameService.map.renderContainerStyle()" >
-    <button (click)="onClick()">aaa</button>
-      <div class="map-outside">Outside</div>
-      <ng-template ngFor let-cell [ngForOf]="gameService.map.cells | keyvalue" >
-        <ng-template [ngIf]="cell.value.name">
-          <div class="cell" [style]="cell.value.renderStyle(gameService.map)" (contextmenu)="openCellMenu($event, cell.value); $event. preventDefault();" >
-            {{ cell.value.name }}
-            <div cdkDrag cdkDragBoundary=".map-container"  (contextmenu)="openUnitMenu($event, user); $event. preventDefault();" >aaaa {{ cell.value.name }}</div>
+    <div class="map-container" [style]="gameService.renderContainerStyle()" cdkDropListGroup>
+      <div class="map-outside" 
+          id="map-outside"
+          cdkDropList [cdkDropListData]="''" [cdkDropListEnterPredicate]="onDropEnter" (cdkDropListDropped)="dropped($event)" 
+          (cdkDropListEntered)="cdkDropListEntered($event)"
+          (cdkDropListExited)="cdkDropListExited($event)"
+        >
+        <ng-template ngFor let-unit [ngForOf]="gameService.units" >
+          <div [class]="unit.owner + ' squad'+unit.squad +' '+unit.unitType+' unit-wrapper'"  [style]="gameService.renderUnitStyle(unit)">
+            <div class="unit" cdkDrag [cdkDragData]="unit" __cdkDragBoundary=".map-container"
+              (contextmenu)="openUnitMenu($event, unit); $event.preventDefault();" >
+                {{ unit.unitType }} {{unit.squad}}
+            </div>
+          </div>
+        </ng-template>
+      </div>
+      <ng-template ngFor let-cellKV [ngForOf]="gameService.map.cells | keyvalue"  >
+        <ng-template [ngIf]="cellKV.value.name">
+          <div class="cell" [style]="gameService.renderCellStyle(cellKV.value)"
+          (contextmenu)="openCellMenu($event, cellKV.value); $event.preventDefault();"           
+          cdkDropList [cdkDropListData]="cellKV.value.name" (cdkDropListDropped)="dropped($event)" [cdkDropListEnterPredicate]="onDropEnter"
+          (cdkDropListEntered)="cdkDropListEntered($event)"
+          (cdkDropListExited)="cdkDropListExited($event)">
+            {{ cellKV.value.name }}
+            <div class="defence">{{ cellKV.value.defence }}</div>
+            <ng-template [ngIf]="cellKV.value.defence!=cellKV.value.defenceHill">
+              <div class="defenceHill">{{ cellKV.value.defenceHill }}</div>
+            </ng-template>
+            <ng-template ngFor let-player [ngForOf]="gameService.PLAYERS" >
+              <ng-template [ngIf]="cellKV.value[player].occupied">
+                <div [class]="player+ ' occupied icon-'+player"></div>
+              </ng-template>
+              <ng-template [ngIf]="cellKV.value[player].scouted && !cellKV.value[player].occupied">
+                <div [class]="player+ ' scouted  icon-binoculars'"></div>
+              </ng-template>
+              <ng-template [ngIf]="cellKV.value[player].target">
+                <div [class]="player+ ' target icon-target'"></div>
+              </ng-template>
+            </ng-template>
           </div>
         </ng-template>
       </ng-template>
     </div>
     <ng-template #cellMenu let-cell>
-      <section class="map-menu">
-        <div (click)="delete(cell)">Delete {{cell.name}}</div>
-        <div>Send to</div>
+      <section class="map-menu" style="z-index:9999">
+        <ng-template [ngIf]="cell[gameService.player].scouted===false">
+          <div (click)="gameService.setCellScouted(cell,gameService.player, true)">Set scouted</div>
+        </ng-template>
+        <ng-template [ngIf]="cell[gameService.player].scouted===true">
+          <div (click)="gameService.setCellScouted(cell,gameService.player, false)">Remove scouted</div>
+        </ng-template>
+        <ng-template [ngIf]="cell[gameService.player].occupied===false && cell[gameService.player].scouted===true && gameService.findEnemiesInCell(cell).length===0">
+          <div (click)="gameService.setCellOccupied(cell,gameService.player, true)">Set occupied</div>
+        </ng-template>
+        <ng-template [ngIf]="cell[gameService.player].occupied===true">
+          <div (click)="gameService.setCellOccupied(cell,gameService.player, false)">Remove occupied</div>
+        </ng-template>
+        <ng-template [ngIf]="cell[gameService.player].target===false">
+          <div (click)="gameService.setCellTarget(cell,gameService.player, true)">Set mortar target</div>
+        </ng-template>
+        <ng-template [ngIf]="cell[gameService.player].target===true">
+          <div (click)="gameService.setCellTarget(cell,gameService.player, false)">Remove mortar target</div>
+        </ng-template>
       </section>
     </ng-template>
     <ng-template #unitMenu let-unit>
-      <section class="map-menu">
-        <div (click)="delete(unit)">{{unit}}</div>
-        <div>Send to</div>
+      <section class="map-menu" style="z-index:9999">
+        <ng-template [ngIf]="unit.suppressed===false">
+          <div (click)="gameService.setUnitSuppressed(unit,true)">Set suppressed</div>
+        </ng-template>
+        <ng-template [ngIf]="unit.suppressed===true">
+          <div (click)="gameService.setUnitSuppressed(unit,false)">Remove suppressed</div>
+        </ng-template>
+        <div (click)="gameService.inflictCasualty(unit)">Inflict one casualty</div>
       </section>
     </ng-template>
   `,
@@ -156,14 +210,12 @@ export class GameMapComponent {
   constructor(
     public gameService: GameService,
     public overlay: Overlay,
-    public viewContainerRef: ViewContainerRef) {
+    public viewContainerRef: ViewContainerRef,
+    private renderer: Renderer2) {
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  onClick(){
-    this.gameService.map.getCell(0,0).name="aaaaa";
-  }
 
   openCellMenu({ x, y }: MouseEvent, cell) {
     this.close();
@@ -198,9 +250,38 @@ export class GameMapComponent {
 
   }
 
-  delete(user) {
-    // delete user
+  
+  openUnitMenu({ x, y }: MouseEvent, unit) {
     this.close();
+    const positionStrategy = this.overlay.position()
+      .flexibleConnectedTo({ x, y })
+      .withPositions([
+        {
+          originX: 'end',
+          originY: 'bottom',
+          overlayX: 'end',
+          overlayY: 'top',
+        }
+      ]);
+
+    this.overlayRef = this.overlay.create({
+      positionStrategy,
+      scrollStrategy: this.overlay.scrollStrategies.close()
+    });
+
+    this.overlayRef.attach(new TemplatePortal(this.unitMenu, this.viewContainerRef, {
+      $implicit: unit
+    }));
+
+    this.sub = fromEvent<MouseEvent>(document, 'click')
+      .pipe(
+        filter(event => {
+          const clickTarget = event.target as HTMLElement;
+          return !!this.overlayRef && !this.overlayRef.overlayElement.contains(clickTarget);
+        }),
+        take(1)
+      ).subscribe(() => this.close())
+
   }
 
   close() {
@@ -209,6 +290,33 @@ export class GameMapComponent {
       this.overlayRef.dispose();
       this.overlayRef = null;
     }
+  }
+
+  onDropEnter(){
+    //TODO: custom logic drop?
+    return true;
+  }
+
+  cdkDropListEntered(event: CdkDragEnter<string[]>) {
+    this.renderer.addClass(event.container.element.nativeElement, 'drop-target');
+  }
+
+  cdkDropListExited(event: CdkDragExit<string[]>) {
+    let preview = new ElementRef<HTMLElement>(document.querySelector('.drop-target'));
+    if (preview && preview.nativeElement){
+      this.renderer.removeClass(preview.nativeElement, 'drop-target');
+    }
+  }
+  
+  dropped(event: CdkDragDrop<Unit[]>) {
+    event.item.data.tileName=event.container.data;
+
+    let preview = new ElementRef<HTMLElement>(document.querySelector('.drop-target'));
+    if (preview && preview.nativeElement){
+      this.renderer.removeClass(preview.nativeElement, 'drop-target');
+    }
+
+    return;
   }
 
 }
