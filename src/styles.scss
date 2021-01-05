@@ -1,3 +1,12 @@
+$US_COLOR: #2D8256;
+$US_FC: #ffffff;
+$US_BG: #2D8256;
+
+$GERMAN_COLOR: #267981;
+$GERMAN_FC: #267981;
+$GERMAN_BG: #ffffff;
+
+
 body {
   font-family: Roboto, Arial, sans-serif;
   margin: 0;
@@ -171,6 +180,7 @@ my-app {
   border-radius: 20px;
   z-index: 999;
   font-size: 4px;
+  transition:all 0.6s ease;
 }
 .map .unit{
   width: 40px;
@@ -190,4 +200,13 @@ my-app {
 }
 .map .cdk-drag-placeholder {
   display:none !important;
+}
+
+.unit-wrapper.us{
+  background-color: $US_BG;
+  color: $US_FC;
+}
+.unit-wrapper.german{
+  background-color: $GERMAN_BG;
+  color: $GERMAN_FC;
 }

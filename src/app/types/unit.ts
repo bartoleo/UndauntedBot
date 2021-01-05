@@ -12,6 +12,7 @@ export enum UnitType {
 }
 
 export class Unit {
+  key: string;
   unitType: UnitType;
   squad: string;
   owner: string;
@@ -19,6 +20,7 @@ export class Unit {
   tileName: string; 
 
   constructor(owner: string, unitType: string, squad: string, tileName: string){
+    this.key=owner+"_"+unitType+"_"+squad;
     this.owner = owner;
     this.unitType = UnitType[Object.keys(UnitType).filter(x => UnitType[x] == unitType)[0]];
     this.tileName = tileName;

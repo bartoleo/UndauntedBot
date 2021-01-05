@@ -33,6 +33,7 @@ export class GameService {
   units: Array<Unit>;
 
   tileSize: number = 82;
+  unitSize: number = 41;
   rotateMap: false;
   outsideHeight: number = 100;
 
@@ -125,6 +126,7 @@ export class GameService {
   getUnitDrawCoords(unit: Unit){
     let x;
     let y;
+    let offset=0;
 
     if (unit.tileName){
       let cell = this.map.findTile(unit.tileName);
@@ -135,7 +137,16 @@ export class GameService {
       x = 0;
       y = 0;
     }
+    
     let otherUnits = this.findOtherUnits(unit.tileName);
+
+    otherUnits.forEach((element:Unit) => {
+      if (element.key>unit.key){
+        offset ++;
+      }
+    });
+
+    x+=offset*this.unitSize;
 
     return {x,y};
   } 
@@ -146,11 +157,11 @@ export class GameService {
     return style;
   }
 
-  findOtherUnits(tileName: string){
+  findOtherUnits(tileName: string, unit: Unit){
     let units = [];
-    this.units.forEach((unit : Unit) => {
-      if (unit.tileName === tileName){
-        units.push(unit);
+    this.units.forEach((unitItem : Unit) => {
+      if (unitItem.tileName === tileName && unitItem.key !== unit){
+        units.push(unitItem);
       }
     });
     return units;
