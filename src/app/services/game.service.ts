@@ -138,7 +138,7 @@ export class GameService {
       y = 0;
     }
     
-    let otherUnits = this.findOtherUnits(unit.tileName);
+    let otherUnits = this.findOtherUnits(unit.tileName, unit);
 
     otherUnits.forEach((element:Unit) => {
       if (element.key>unit.key){
@@ -160,7 +160,7 @@ export class GameService {
   findOtherUnits(tileName: string, unit: Unit){
     let units = [];
     this.units.forEach((unitItem : Unit) => {
-      if (unitItem.tileName === tileName && unitItem.key !== unit){
+      if (unitItem.tileName === tileName && unitItem.key !== unit.key){
         units.push(unitItem);
       }
     });

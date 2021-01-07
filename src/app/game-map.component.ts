@@ -4,7 +4,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { fromEvent, Subscription } from 'rxjs';
 import { take, filter } from 'rxjs/operators';
-import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragEnter, CdkDragExit } from '@angular/cdk/drag-drop';
 import { Unit, UnitType } from "./types/unit";
 
 @Component({
